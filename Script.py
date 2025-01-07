@@ -11,7 +11,7 @@ class script(object):
 
     ABOUT_TXT = """
 <b>❍ ᴍʏ ɴᴀᴍᴇ : <a href="https://t.me/SpeedMovies_bot">Riya 2.0</a>
-❍ ᴄʀᴇᴀᴛᴏʀ : <a href="https://t.me/maximize0'>⭐ N ϟ C K࿐ ⭐</a>
+❍ ᴄʀᴇᴀᴛᴏʀ : <a href="https://t.me/maximize0">⭐ N ϟ C K࿐ ⭐</a>
 ❍ ʟɪʙʀᴀʀʏ : <a href="https://pyrogram.org/">ᴘʏʀᴏɢʀᴀᴍ</a>
 ❍ ʟᴀɴɢᴜᴀɢᴇ : <a href="https://www.python.org/">ᴘʏᴛʜᴏɴ</a>
 ❍ ᴅᴀᴛᴀʙᴀꜱᴇ : <a href="https://www.mongodb.com/">ᴍᴏɴɢᴏ ᴅʙ</a>
@@ -1146,7 +1146,7 @@ Requested by : {message.from_user.mention}</b>"""
 ● <code>250₹</code> ➛ <u>ᴘʟᴀᴛɪɴᴜᴍ ᴘʟᴀɴ</u> » <code>180 ᴅᴀʏꜱ</code>
 ● <code>400₹</code> ➛ <u>ᴅɪᴀᴍᴏɴᴅ ᴘʟᴀɴ</u> » <code>365 ᴅᴀʏꜱ</code>
 
-💵 ᴜᴘɪ ɪᴅ - <code>dm - @maximize0 </code>
+💵 ᴜᴘɪ ɪᴅ - <code>paytohemant@fam</code>
 📸 ǫʀ ᴄᴏᴅᴇ - <a href='https://telegra.ph/paytohemantfam-07-20'>ᴄʟɪᴄᴋ ʜᴇʀᴇ ᴛᴏ ꜱᴄᴀɴ</a>
 
 ⚜️ ᴄʜᴇᴄᴋ ʏᴏᴜʀ ᴀᴄᴛɪᴠᴇ ᴘʟᴀɴ ʙʏ ᴜꜱɪɴɢ : /myplan
