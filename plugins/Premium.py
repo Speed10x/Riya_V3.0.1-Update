@@ -146,8 +146,20 @@ async def plan(client, message):
     user_id = message.from_user.id 
     users = message.from_user.mention 
     btn = [[
-	
-        InlineKeyboardButton("📲 ꜱᴇɴᴅ ᴘᴀʏᴍᴇɴᴛ ꜱᴄʀᴇᴇɴꜱʜᴏᴛ ʜᴇʀᴇ", user_id=int(6497757690))],[InlineKeyboardButton("❌ ᴄʟᴏꜱᴇ ❌", callback_data="close_data")
+            InlineKeyboardButton('• Rᴇғᴇʀ •', callback_data='reffff')
+        ],[
+            InlineKeyboardButton('• ʙʀᴏɴᴢᴇ ', callback_data='broze'),
+            InlineKeyboardButton('• ꜱɪʟᴠᴇʀ ', callback_data='silver')
+        ],[
+            InlineKeyboardButton('• ɢᴏʟᴅ ', callback_data='gold'),
+            InlineKeyboardButton('• ᴘʟᴀᴛɪɴᴜᴍ ', callback_data='platinum')
+        ],[
+            InlineKeyboardButton('• ᴅɪᴀᴍᴏɴᴅ ', callback_data='diamond'),
+            InlineKeyboardButton('• ᴏᴛʜᴇʀ ', callback_data='other')
+        ],[
+            InlineKeyboardButton('• ꜰʀᴇᴇ ᴛʀɪᴀʟ ', callback_data='free')
+        ],[            
+            InlineKeyboardButton('⇋ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ⇋', callback_data='start')
     ]]
     await message.reply_photo(photo="https://telegra.ph/file/734170f40b8169830d821.jpg", caption=script.PREMIUM_TEXT.format(message.from_user.mention), reply_markup=InlineKeyboardMarkup(btn))
     
