@@ -1,77 +1,98 @@
 
-import os
-import asyncio
-from aiohttp import web
-from pyrogram import Client
-from lazybot import LazyPrincessBot
-from lazybot.clients import initialize_clients
+import sys
+from pyromod import listen
+import glob
+import importlib
+from pathlib import Path
+from pyrogram import idle
+import logging
+import logging.config
+
+# Get logging configurations
+logging.config.fileConfig('logging.conf')
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("imdbpy").setLevel(logging.ERROR)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logging.getLogger("aiohttp").setLevel(logging.ERROR)
+logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
+
+
+from pyrogram import Client, version
+from pyrogram.raw.all import layer
 from database.ia_filterdb import Media
 from database.users_chats_db import db
+from info import *
 from utils import temp
-import logging
+from typing import Union, Optional, AsyncGenerator
+from pyrogram import types
+from Script import script 
+from datetime import date, datetime 
 import pytz
-from datetime import date, datetime
-from Script import script
+from aiohttp import web
 from plugins import web_server
 
-# Define webhook URL & port
-WEBHOOK_HOST = os.getenv("WEBHOOK_HOST", "https://comparable-orel-aerofilms-bd14adfe.koyeb.app")  # Change to your actual domain
-WEBHOOK_PATH = "/webhook"
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
-PORT = int(os.getenv("PORT", 8443))  # Change if needed
+import asyncio
+from pyrogram import idle
+from lazybot import LazyPrincessBot
+from util.keepalive import ping_server
+from lazybot.clients import initialize_clients
 
-async def start_bot():
-    print("\nStarting Lucy Bot with Webhook Mode")
-    
+
+ppath = "plugins/*.py"
+files = glob.glob(ppath)
+LazyPrincessBot.start()
+loop = asyncio.get_event_loop()
+
+
+async def Lazy_start():
+    print('\n')
+    print('Initalizing Lucy Bot')
     bot_info = await LazyPrincessBot.get_me()
     LazyPrincessBot.username = bot_info.username
-
     await initialize_clients()
-    
-    # Get banned users and chats
+    for name in files:
+        with open(name) as a:
+            patt = Path(a.name)
+            plugin_name = patt.stem.replace(".py", "")
+            plugins_dir = Path(f"plugins/{plugin_name}.py")
+            import_path = "plugins.{}".format(plugin_name)
+            spec = importlib.util.spec_from_file_location(import_path, plugins_dir)
+            load = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(load)
+            sys.modules["plugins." + plugin_name] = load
+            print("Lucy Imported => " + plugin_name)
+    if ON_HEROKU:
+        asyncio.create_task(ping_server())
     b_users, b_chats = await db.get_banned()
     temp.BANNED_USERS = b_users
     temp.BANNED_CHATS = b_chats
     await Media.ensure_indexes()
-    
     me = await LazyPrincessBot.get_me()
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
     LazyPrincessBot.username = '@' + me.username
-    
-    logging.info(f"{me.first_name} started using Pyrogram Webhooks.")
-
-    # Send bot restart message
+    logging.info(f"{me.first_name} with for Pyrogram v{version} (Layer {layer}) started on {me.username}.")
+    logging.info(LOG_STR)
+    logging.info(script.LOGO)
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
     await LazyPrincessBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+    app = web.AppRunner(await web_server())
+    await app.setup()
+    bind_address = "0.0.0.0"
+    await web.TCPSite(app, bind_address, PORT).start()
+    await idle()
 
-    # Set webhook
-    await LazyPrincessBot.set_webhook(WEBHOOK_URL)
 
-    # Start aiohttp web server
-    app = web.Application()
-    app.router.add_post(WEBHOOK_PATH, webhook_handler)
-    
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", PORT)
-    await site.start()
-
-    await asyncio.Event().wait()  # Keep the bot running
-
-# Handle incoming webhook updates
-async def webhook_handler(request):
-    update = await request.json()
-    await LazyPrincessBot.process_update(update)
-    return web.Response()
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
+if name == 'main':
     try:
-        loop.run_until_complete(start_bot())
+        loop.run_until_complete(Lazy_start())
     except KeyboardInterrupt:
-        logging.info("Shutting down webhook bot. Goodbye! 👋")
+        logging.info('Service Stopped Bye 👋')
