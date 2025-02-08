@@ -1,5 +1,10 @@
 from aiohttp import web
-import re, math, logging, secrets, mimetypes, time
+import re
+import math
+import logging
+import secrets
+import time
+import mimetypes
 from aiohttp.http_exceptions import BadStatusLine
 from lazybot import multi_clients, work_loads, LazyPrincessBot
 from server.exceptions import FIleNotFound, InvalidHash
